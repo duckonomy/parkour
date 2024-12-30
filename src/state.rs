@@ -47,20 +47,16 @@ impl ProjectState {
     }
 
     pub fn list_projects(&self) {
-        let mut projects: Vec<Project> = self
+        let mut projects: Vec<&Project> = self
             .projects
             .values()
             .filter(|p| !self.blacklist.contains(&p.path))
-            .cloned()
             .collect();
 
         projects.sort_by(|a, b| b.priority.cmp(&a.priority));
 
-        // projects
         for project in projects {
-            if !self.blacklist.contains(&project.path) {
-                println!("{}", project.path.display());
-            }
+            println!("{}", project.path.display());
         }
     }
 
@@ -119,15 +115,14 @@ impl ProjectState {
             return;
         }
 
-        // let path_str = norm_path.to_string_lossy().to_string();
         if self.projects.contains_key(&norm_path) {
             println!("Project already exists");
             return;
         }
 
         let project = Project::new(
-            norm_path.display().to_string(),
-            norm_path.clone(), // path_str.clone(),
+            &norm_path.file_name().unwrap_or_default().to_string_lossy(),
+            &norm_path,
         );
 
         // self.projects.insert(path_str, project);
@@ -146,9 +141,6 @@ impl ProjectState {
             }
         };
 
-        // let path_str = norm_path.to_string_lossy().to_string();
-
-        // if self.projects.remove(&path_str).is_none() {
         if self.projects.remove(&norm_path).is_none() {
             println!("Project not found");
             return;
@@ -168,7 +160,7 @@ impl ProjectState {
     pub fn get_project(&mut self, path: &Path) -> io::Result<Option<Project>> {
         let norm_path = canonicalize(path).unwrap();
 
-        if let Some(project) = self.projects.get(&norm_path).cloned() {
+        if let Some(project) = self.projects.remove(&norm_path) {
             self.increment_project_priority(&norm_path);
             Ok(Some(project))
         } else {

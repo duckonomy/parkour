@@ -14,10 +14,10 @@ pub struct Project {
 }
 
 impl Project {
-    pub fn new(name: String, path: PathBuf) -> Self {
+    pub fn new(name: &str, path: &Path) -> Self {
         Self {
-            name,
-            path,
+            name: name.into(),
+            path: path.into(),
             kind: String::new(),
             description: String::new(),
             priority: 0,
