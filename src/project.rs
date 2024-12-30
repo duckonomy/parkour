@@ -53,15 +53,15 @@ impl Project {
     }
 }
 
-static PROJECT_LANGUAGE_FILES_COLLECT: LazyLock<Vec<HashMap<String, Vec<&str>>>> =
+static PROJECT_LANGUAGE_FILES_COLLECT: LazyLock<Vec<HashMap<&str, Vec<&str>>>> =
     LazyLock::new(|| {
         let mut total = Vec::new();
         let mut language_map = HashMap::new();
-        // let mut vc_map = HashMap::new();
-        // let mut misc_map = HashMap::new();
+        let mut vc_map = HashMap::new();
+        let mut misc_map = HashMap::new();
 
         language_map.insert(
-            "c".to_string(),
+            "c",
             vec![
                 "compile_commands.json",
                 "compile_flags.txt",
@@ -74,157 +74,116 @@ static PROJECT_LANGUAGE_FILES_COLLECT: LazyLock<Vec<HashMap<String, Vec<&str>>>>
             ],
         );
 
-        // language_map.insert(
-        //     "cpp".to_string(),
-        //     vec![
-        //         "compile_commands.json".to_string(),
-        //         "compile_flags.txt".to_string(),
-        //         "Makefile".to_string(),
-        //         ".clangd".to_string(),
-        //         ".ccls-cache".to_string(),
-        //     ],
-        // );
-        //
-        // // Python
-        // language_map.insert(
-        //     "python".to_string(),
-        //     vec![
-        //         "pyproject.toml".to_string(),
-        //         "requirements.txt".to_string(),
-        //         "setup.py".to_string(),
-        //         "tox.ini".to_string(),
-        //         ".tox".to_string(),
-        //         "pyrightconfig.json".to_string(),
-        //     ],
-        // );
-        //
-        // // JavaScript/Node.js
-        // language_map.insert(
-        //     "nodejs".to_string(),
-        //     vec![
-        //         "package.json".to_string(),
-        //         "yarn.lock".to_string(),
-        //         "pnpm-lock.yaml".to_string(),
-        //         "webpack.config.js".to_string(),
-        //         "rollup.config.js".to_string(),
-        //         "vite.config.js".to_string(),
-        //     ],
-        // );
-        //
-        // // Go
-        // language_map.insert(
-        //     "go".to_string(),
-        //     vec!["go.mod".to_string(), "go.sum".to_string()],
-        // );
-        //
-        // // Rust
-        // language_map.insert(
-        //     "rust".to_string(),
-        //     vec!["Cargo.toml".to_string(), "Cargo.lock".to_string()],
-        // );
-        //
-        // // Java
-        // language_map.insert(
-        //     "java".to_string(),
-        //     vec![
-        //         "pom.xml".to_string(),
-        //         "build.gradle".to_string(),
-        //         "build.gradle.kts".to_string(),
-        //         ".classpath".to_string(),
-        //         ".project".to_string(),
-        //     ],
-        // );
-        //
-        // // Haskell
-        // language_map.insert(
-        //     "haskell".to_string(),
-        //     vec![
-        //         "stack.yaml".to_string(),
-        //         "cabal.config".to_string(),
-        //         "package.yaml".to_string(),
-        //         "hie-bios".to_string(),
-        //     ],
-        // );
-        //
-        // // Dart/Flutter
-        // language_map.insert("dart".to_string(), vec!["pubspec.yaml".to_string()]);
-        //
-        // // Ruby
-        // language_map.insert(
-        //     "ruby".to_string(),
-        //     vec!["Gemfile".to_string(), "Gemfile.lock".to_string()],
-        // );
-        //
-        // // PHP
-        // language_map.insert(
-        //     "php".to_string(),
-        //     vec!["composer.json".to_string(), "composer.lock".to_string()],
-        // );
-        //
-        // // Docker
-        // language_map.insert(
-        //     "docker".to_string(),
-        //     vec!["Dockerfile".to_string(), "docker-compose.yml".to_string()],
-        // );
-        //
-        // // Elm
-        // language_map.insert("elm".to_string(), vec!["elm.json".to_string()]);
-        //
-        // // Fortran
-        // language_map.insert("fortran".to_string(), vec!["fortls".to_string()]);
-        //
-        // // Nix
-        // language_map.insert(
-        //     "nix".to_string(),
-        //     vec!["flake.nix".to_string(), ".envrc".to_string()],
-        // );
-        //
-        // // Scala
-        // language_map.insert(
-        //     "scala".to_string(),
-        //     vec!["build.sbt".to_string(), ".ensime_cache".to_string()],
-        // );
-        //
-        // // Vue
-        // language_map.insert("vue".to_string(), vec!["vue.config.js".to_string()]);
-        //
-        // // Godot
-        // language_map.insert("godot".to_string(), vec!["project.godot".to_string()]);
-        //
-        // vc_map.insert(
-        //     "git".to_string(),
-        //     vec![".git".to_string(), ".gitignore".to_string()],
-        // );
-        // vc_map.insert("svn".to_string(), vec![".svn".to_string()]);
-        // vc_map.insert("mercurial".to_string(), vec![".hg".to_string()]);
-        // vc_map.insert("bazaar".to_string(), vec![".bzr".to_string()]);
-        // vc_map.insert(
-        //     "fossil".to_string(),
-        //     vec!["_FOSSIL_".to_string(), ".fslckout".to_string()],
-        // );
-        // vc_map.insert("pijul".to_string(), vec![".pijul".to_string()]);
-        //
-        // misc_map.insert(
-        //     "editor".to_string(),
-        //     vec![".idea".to_string(), ".vscode".to_string()],
-        // );
-        //
-        // // Miscellaneous
-        // misc_map.insert("ocaml".to_string(), vec![".merlin".to_string()]);
-        // misc_map.insert("erlang".to_string(), vec![".eunit".to_string()]);
-        // misc_map.insert("make".to_string(), vec!["Makefile".to_string()]);
-        // misc_map.insert(
-        //     "metals".to_string(),
-        //     vec!["metals.sbt".to_string(), "build.sc".to_string()],
-        // );
-        // misc_map.insert(
-        //     "environment".to_string(),
-        //     vec![".env".to_string(), ".envrc".to_string()],
-        // );
-        // misc_map.insert("cache".to_string(), vec![".cache".to_string()]);
-        //
+        language_map.insert(
+            "cpp",
+            vec![
+                "compile_commands.json",
+                "compile_flags.txt",
+                "Makefile",
+                ".clangd",
+                ".ccls-cache",
+            ],
+        );
+
+        // Python
+        language_map.insert(
+            "python",
+            vec![
+                "pyproject.toml",
+                "requirements.txt",
+                "setup.py",
+                "tox.ini",
+                ".tox",
+                "pyrightconfig.json",
+            ],
+        );
+
+        // JavaScript/Node.js
+        language_map.insert(
+            "nodejs",
+            vec![
+                "package.json",
+                "yarn.lock",
+                "pnpm-lock.yaml",
+                "webpack.config.js",
+                "rollup.config.js",
+                "vite.config.js",
+            ],
+        );
+
+        // Go
+        language_map.insert("go", vec!["go.mod", "go.sum"]);
+
+        // Rust
+        language_map.insert("rust", vec!["Cargo.toml", "Cargo.lock"]);
+
+        // Java
+        language_map.insert(
+            "java",
+            vec![
+                "pom.xml",
+                "build.gradle",
+                "build.gradle.kts",
+                ".classpath",
+                ".project",
+            ],
+        );
+
+        // Haskell
+        language_map.insert(
+            "haskell",
+            vec!["stack.yaml", "cabal.config", "package.yaml", "hie-bios"],
+        );
+
+        // Dart/Flutter
+        language_map.insert("dart", vec!["pubspec.yaml"]);
+
+        // Ruby
+        language_map.insert("ruby", vec!["Gemfile", "Gemfile.lock"]);
+
+        // PHP
+        language_map.insert("php", vec!["composer.json", "composer.lock"]);
+
+        // Docker
+        language_map.insert("docker", vec!["Dockerfile", "docker-compose.yml"]);
+
+        // Elm
+        language_map.insert("elm", vec!["elm.json"]);
+
+        // Fortran
+        language_map.insert("fortran", vec!["fortls"]);
+
+        // Nix
+        language_map.insert("nix", vec!["flake.nix", ".envrc"]);
+
+        // Scala
+        language_map.insert("scala", vec!["build.sbt", ".ensime_cache"]);
+
+        // Vue
+        language_map.insert("vue", vec!["vue.config.js"]);
+
+        // Godot
+        language_map.insert("godot", vec!["project.godot"]);
+
+        vc_map.insert("git", vec![".git", ".gitignore"]);
+        vc_map.insert("svn", vec![".svn"]);
+        vc_map.insert("mercurial", vec![".hg"]);
+        vc_map.insert("bazaar", vec![".bzr"]);
+        vc_map.insert("fossil", vec!["_FOSSIL_", ".fslckout"]);
+        vc_map.insert("pijul", vec![".pijul"]);
+
+        misc_map.insert("editor", vec![".idea", ".vscode"]);
+
+        // Miscellaneous
+        misc_map.insert("ocaml", vec![".merlin"]);
+        misc_map.insert("erlang", vec![".eunit"]);
+        misc_map.insert("make", vec!["Makefile"]);
+        misc_map.insert("metals", vec!["metals.sbt", "build.sc"]);
+        misc_map.insert("environment", vec![".env", ".envrc"]);
+        misc_map.insert("cache", vec![".cache"]);
+
         total.push(language_map);
-        // total.push(vc_map);
-        // total.push(misc_map);
+        total.push(vc_map);
+        total.push(misc_map);
         total
     });

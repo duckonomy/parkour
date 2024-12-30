@@ -1,0 +1,15 @@
+# Roadmap
+- [x] jump to a file in project - with fd/fzf
+- [x] jump to files at point in project - with fd/fzf
+- [x] jump to a directory in project - with fd/fzf
+- [x] jump to a file in a directory - with fd/fzf
+- [ ] jump to a project buffer - with fd/fzf
+- [ ] run make in a project with a single key chord
+- [ ] jump to a test in project
+- [ ] toggle between files with same names but different extensions (e.g. .h ←→ .c/.cpp, Gemfile ←→ Gemfile.lock)
+- [ ] toggle between code and its test (e.g. main.service.js ←→ main.service.spec.js)
+- [ ] jump to recently visited files in the project
+- [ ] switch between projects you have worked on
+- [ ] browse dirty version controlled projects (needs hook)
+- [ ] integration with skim for prompt-worthy things (adding compile command/renaming/listing etc)
+- [ ] compile commands

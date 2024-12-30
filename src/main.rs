@@ -8,7 +8,7 @@ use std::path::{Path, PathBuf};
 
 #[derive(Parser)]
 #[command(name = "pk")]
-#[command(about = "Project root finder")]
+#[command(about = "Project Manager")]
 struct Cli {
     #[command(subcommand)]
     command: Option<Commands>,
