@@ -13,3 +13,4 @@
 - [ ] browse dirty version controlled projects (needs hook)
 - [ ] integration with skim for prompt-worthy things (adding compile command/renaming/listing etc)
 - [ ] compile commands
+- [ ] version control
